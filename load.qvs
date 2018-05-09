@@ -34,24 +34,27 @@ FROM [lib://Storage/2.Transformador\QVD\fornecedor.qvd]
 
 [Linktable]:
 LOAD
-    %venda,
+    __LKT_venda,
     %filial,
     %cliente,
     %condicaoPagamento,
     %data,
     %produto,
     %tes,
-    %compra,
+    __LKT_compra,
     %fornecedor,
-    %receber,
-    %pagar
+    %venda,
+    __LKT_receber,
+    %compra,
+    __LKT_pagar
 FROM [lib://Storage/2.Transformador\QVD\linktable.qvd]
 (qvd);
 
 
+
 [nf saida]:
 LOAD
-    %venda,
+    %venda										as __LKT_venda,
     //%filial,
     "Numero da NF de saida",
     "Serie da NF de Saida",
@@ -71,7 +74,7 @@ FROM [lib://Storage/2.Transformador\QVD\notafiscal_saida.qvd]
 
 [nf compras]:
 LOAD
-    %compra,
+    %compra							as __LKT_compra,
     //%filial,
     "Numero NF de Entrada",
     "Serie NF de Entrada",
@@ -93,7 +96,7 @@ FROM [lib://Storage/2.Transformador\QVD\notafiscal_compra.qvd]
 LOAD
     //%filial,
     //%compra,
-    %pagar,
+    %pagar								as __LKT_pagar,
     //%fornecedor,
     "Data Emissão Pagar",
     "Data Vencimento Pagar",
@@ -108,7 +111,7 @@ FROM [lib://Storage/2.Transformador\QVD\pagar.qvd]
 LOAD
     //%filial,
     //%venda,
-    %receber,
+    %receber							as __LKT_receber,
     //%cliente,
     "Data Emissão Receber",
     "Data Vencimento Receber",
