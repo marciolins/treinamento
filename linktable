@@ -1,0 +1,51 @@
+// linktable - relacionamento entre fatos
+[Linktable]:
+// nf - vendas (saida)
+LOAD
+    %venda,
+    %filial,
+    %cliente,
+    %condicaoPagamento,
+    "Data Emissão NF de saida"		as %data,
+    %produto,
+    %tes
+FROM [lib://Storage/2.Transformador\QVD\notafiscal_saida.qvd]
+(qvd);
+
+Concatenate
+// nf - compras (entrada)
+LOAD
+    %compra,
+    %filial,
+    %fornecedor,
+    %condicaoPagamento,
+    "Data Emissao NF Entrada"	as %data,
+    %produto,
+    %tes
+FROM [lib://Storage/2.Transformador\QVD\notafiscal_compra.qvd]
+(qvd);
+
+Concatenate
+// financeiro - receber
+LOAD
+    %filial,
+    %venda,
+    %receber,
+    %cliente,
+    date("Data Vencimento Receber")	as %data
+FROM [lib://Storage/2.Transformador\QVD\receber.qvd]
+(qvd);
+
+Concatenate
+// financeiro - pagar
+LOAD
+    %filial,
+    %compra,
+    %pagar,
+    %fornecedor,
+    date("Data Vencimento Pagar")		as %data
+FROM [lib://Storage/2.Transformador\QVD\pagar.qvd]
+(qvd);
+
+store [Linktable] into [lib://Storage/2.Transformador/QVD/linktable.qvd](qvd);
+drop Table [Linktable];
