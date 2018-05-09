@@ -1,0 +1,120 @@
+[cliente]:
+LOAD
+    *
+FROM [lib://Storage/2.Transformador\QVD\cliente.qvd]
+(qvd);
+
+[produto]:
+LOAD
+   *
+FROM [lib://Storage/2.Transformador\QVD\produto.qvd]
+(qvd);
+
+[grupo produto]:
+LOAD
+    *
+FROM [lib://Storage/2.Transformador\QVD\grupoProduto.qvd]
+(qvd);
+
+[TES]:
+LOAD
+    *
+FROM [lib://Storage/2.Transformador\QVD\tes.qvd]
+(qvd);
+
+[fornecedor]:
+LOAD
+    %fornecedor,
+    fornecedor,
+    "razao social fornecedor"
+FROM [lib://Storage/2.Transformador\QVD\fornecedor.qvd]
+(qvd);
+
+
+
+[Linktable]:
+LOAD
+    %venda,
+    %filial,
+    %cliente,
+    %condicaoPagamento,
+    %data,
+    %produto,
+    %tes,
+    %compra,
+    %fornecedor,
+    %receber,
+    %pagar
+FROM [lib://Storage/2.Transformador\QVD\linktable.qvd]
+(qvd);
+
+
+[nf saida]:
+LOAD
+    %venda,
+    //%filial,
+    "Numero da NF de saida",
+    "Serie da NF de Saida",
+    //%cliente,
+    //%condicaoPagamento,
+    "Data Emissão NF de saida",
+    MonthName("Data Emissão NF de saida") 		as [AnoMes Venda],
+    //%produto,
+    //%tes,
+    //"unidade de medida",
+    "quantidade de venda",
+    "preço de unitario de venda",
+    "valor da venda"
+    //"preco medio"
+FROM [lib://Storage/2.Transformador\QVD\notafiscal_saida.qvd]
+(qvd);
+
+[nf compras]:
+LOAD
+    %compra,
+    //%filial,
+    "Numero NF de Entrada",
+    "Serie NF de Entrada",
+    //%fornecedor,
+    //%condicaoPagamento,
+    "Data Emissao NF Entrada",
+    //%produto,
+    //"unidade de medida",
+    "quantidade compra",
+    "preço unitario compra",
+    "valor da compra"
+    //D1_VALIPI,
+    //D1_VALICM,
+    //%tes
+FROM [lib://Storage/2.Transformador\QVD\notafiscal_compra.qvd]
+(qvd);
+
+[pagar]:
+LOAD
+    //%filial,
+    //%compra,
+    %pagar,
+    //%fornecedor,
+    "Data Emissão Pagar",
+    "Data Vencimento Pagar",
+    MonthName("Data Vencimento Pagar") as [MêsAno Pagar],
+    "Data Baixa Pagar",
+    "Valor Pagar",
+    "Saldo Pagar"
+FROM [lib://Storage/2.Transformador\QVD\pagar.qvd]
+(qvd);
+
+[receber]:
+LOAD
+    //%filial,
+    //%venda,
+    %receber,
+    //%cliente,
+    "Data Emissão Receber",
+    "Data Vencimento Receber",
+    "Data Baixa Receber",
+    "Valor Receber",
+    "Saldo Receber"
+FROM [lib://Storage/2.Transformador\QVD\receber.qvd]
+(qvd);
+
