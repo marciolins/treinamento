@@ -1,0 +1,13 @@
+[Calendario]:
+LOAD Distinct
+    %data,
+    %data				as [Data Calendário],
+    year(%data)			as [Ano Calendário],
+    month(%data)		as [Mês Calendário],
+    MonthName(%data)	as [MêsAno Calendário],
+    QuarterName(%data)	as [Trimestre Calendário],
+    WeekDay(%data)		as [Dia da Semana Calendário],
+    WeekYear(%data)		as [SemanaAno Calendário]
+FROM [lib://Storage/2.Transformador\QVD\linktable.qvd]
+(qvd);
+
